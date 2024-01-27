@@ -1,9 +1,13 @@
 import express from "express"
 import userRouter from "./routes/user.js"
 import { connectDB } from "./data/database.js";
+import {config} from "dotenv"
 
 
 const app = express()
+config({
+    path:"./config.env"
+})
 connectDB();
 
 
@@ -18,6 +22,6 @@ app.get("/",(req,res)=>{
     res.send("working fine");
 })
 
-app.listen(4000,()=>{
+app.listen(process.env.PORT,()=>{
     console.log("server is working");
 })
