@@ -14,7 +14,7 @@ connectDB();
 
 // middlewares to access json data and router
 app.use(express.json());
-app.use(userRouter);
+app.use("/api/v1/users",userRouter);
 
 
 

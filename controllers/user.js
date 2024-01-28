@@ -1,40 +1,46 @@
 import { User } from "../models/user.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { sendCookie } from "../utils/features.js";
 
 
-export const getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res) => { }
 
-    const users = await User.find({});
+export const login = async(req,res,next)=>{ 
+    const {email,password} = req.body;
 
-    res.json({
-        success: true,
-        users: users,
-    })
-};
+    const user = await User.findOne({email}).select("+password");
+    if(!user){
+        return res.status(404).json({
+            success: false,
+            message: "Invalid email or password",
+        })
+    }
+    const isMatch = await bcrypt.compare(password,user.password );
+    if(!isMatch){
+        return res.status(404).json({
+            success: false,
+            message: "Invalid email or password",
+        })
+    }
 
+    sendCookie(user,res,`Welcome Back ${user.name}`,201)
+}
 
 export const registerUser = async (req, res) => {
-    // passesd in body in json using postman
-    const { name, email, password } = req.body;
+    const {name,email,password}= req.body;
 
-    await User.create({
-        name,
-        email,
-        password,
-    })
-    res.status(201).json({
-        success: true,
-        message: "Registered Successfully",
-    })
+    let user = await User.findOne({email});
+    if(user){
+        return res.status(404).json({
+            success: false,
+            message: "User already exists",
+        })
+    }
+    const hashedPassword = await bcrypt.hash(password,10);
+    user = await User.create({ name,email,password:hashedPassword })
+
+    sendCookie(user, res,"Registered Successfully", 201)
 }
 
-
-export const getUser = async (req, res) => {
-
-    const { id } = req.params;
-    const user = await User.findById(id);
-
-    res.json({
-        success: true,
-        users: user,
-    })
-}
+export const getUser = async (req, res) => { }
