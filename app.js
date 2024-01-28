@@ -4,6 +4,7 @@ import taskRouter from "./routes/task.js"
 import { connectDB } from "./data/database.js";
 import {config} from "dotenv"
 import cookieParser from "cookie-parser";
+import { errorMiddleware } from "./middlewares/error.js";
 
 
 const app = express()
@@ -30,3 +31,8 @@ app.get("/",(req,res)=>{
 app.listen(process.env.PORT,()=>{
     console.log("server is working");
 })
+
+
+
+// using error middleware
+app.use(errorMiddleware);
