@@ -31,3 +31,49 @@ export const getMyTasks = async (req,res)=>{
         tasks,
     })
 }
+
+
+//--------------------------------------------------
+export const updateTask = async (req,res)=>{
+
+    const {id} = req.params;
+
+    const task = await Task.findById(id);
+
+    if (!task) {
+        res.status(404).json({
+            success: false,
+            message: "Invalid id"
+        })
+    }
+
+    task.isCompleted = !task.isCompleted;
+    await task.save();
+
+    res.status(201).json({
+        success:true,
+        message:"Tasks Updated Successfully",
+    })
+}
+
+
+//--------------------------------------------------
+export const deleteTask = async (req,res)=>{
+
+    const { id } = req.params;
+    const task = await Task.findById(id);
+
+    if(!task){
+        res.status(404).json({
+            success: false,
+            message: "Invalid id"
+        })
+    }
+
+    await task.deleteOne();
+
+    res.status(201).json({
+        success:true,
+        message:"Tasks Deleted Successfully",
+    })
+}
