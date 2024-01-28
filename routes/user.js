@@ -1,7 +1,8 @@
 import express from "express";
 
 
-import { registerUser, getAllUsers, getUser , login} from "../controllers/user.js";
+import { registerUser, getAllUsers, getMydetails, logout , login} from "../controllers/user.js";
+import { isAuthenticated } from "../middlewares/auth.js";
 
 const router = express.Router();
 
@@ -9,7 +10,8 @@ const router = express.Router();
 router.get("/all",getAllUsers);
 router.post("/login", login);
 router.post("/new", registerUser);
-router.get("/:id",getUser)
+router.get("/logout", logout);
+router.get("/me", isAuthenticated,getMydetails)
 
 
 

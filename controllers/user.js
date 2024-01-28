@@ -3,9 +3,10 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { sendCookie } from "../utils/features.js";
 
-
+//////////////-------------------///////////////////
 export const getAllUsers = async (req, res) => { }
 
+//////////////-------------------///////////////////
 export const login = async(req,res,next)=>{ 
     const {email,password} = req.body;
 
@@ -27,6 +28,23 @@ export const login = async(req,res,next)=>{
     sendCookie(user,res,`Welcome Back ${user.name}`,201)
 }
 
+
+
+//////////////-------------------///////////////////
+export const logout = async(req,res)=>{
+    return res.status(200).cookie("token","",{
+        expires:new Date(Date.now())
+    }).json({
+        success: true,
+        message: "Logged OUt successfully",
+    })
+}
+
+
+
+
+
+//////////////-------------------///////////////////
 export const registerUser = async (req, res) => {
     const {name,email,password}= req.body;
 
@@ -43,4 +61,11 @@ export const registerUser = async (req, res) => {
     sendCookie(user, res,"Registered Successfully", 201)
 }
 
-export const getUser = async (req, res) => { }
+//////////////-------------------///////////////////
+export const getMydetails = (req, res) => {
+
+    res.status(200).json({
+        success:true,
+        user: req.user,
+    })
+}

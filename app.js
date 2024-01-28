@@ -2,6 +2,7 @@ import express from "express"
 import userRouter from "./routes/user.js"
 import { connectDB } from "./data/database.js";
 import {config} from "dotenv"
+import cookieParser from "cookie-parser";
 
 
 const app = express()
@@ -14,6 +15,8 @@ connectDB();
 
 // middlewares to access json data and router
 app.use(express.json());
+app.use(cookieParser());
+
 app.use("/api/v1/users",userRouter);
 
 
